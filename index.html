@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>EVG Sam Katz — Tel Aviv 2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f5f5f7;
+      --surface: #ffffff;
+      --text-primary: #1d1d1f;
+      --text-secondary: #6e6e73;
+      --text-tertiary: #aeaeb2;
+      --border: #e5e5ea;
+      --border-light: #f2f2f7;
+      --indigo: #635bff;
+      --indigo-light: #7a73ff;
+      --indigo-bg: rgba(99,91,255,0.06);
+      --indigo-bg2: rgba(99,91,255,0.1);
+      --green: #34c759;
+      --green-bg: rgba(52,199,89,0.08);
+      --orange: #ff9500;
+      --orange-bg: rgba(255,149,0,0.08);
+      --red: #ff3b30;
+      --red-bg: rgba(255,59,48,0.06);
+      --pink: #af52de;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md: 0 2px 8px rgba(0,0,0,0.06), 0 0 1px rgba(0,0,0,0.06);
+      --shadow-lg: 0 4px 24px rgba(0,0,0,0.08), 0 0 1px rgba(0,0,0,0.06);
+      --radius: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+
+    /* ── Hero ── */
+    .hero { padding: 40px 0 24px; text-align: center; }
+
+    .hero-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 100px; padding: 5px 14px;
+      font-size: 12px; font-weight: 500; color: var(--text-secondary);
+      margin-bottom: 16px; box-shadow: var(--shadow-sm);
+    }
+    .hero-pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+
+    .hero h1 { font-size: 40px; font-weight: 700; letter-spacing: -1.5px; line-height: 1.08; }
+    .hero-sub { font-size: 15px; font-weight: 500; color: var(--text-secondary); margin-top: 6px; }
+
+    /* ── Tab Bar ── */
+    .tab-bar-wrap {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(245,245,247,0.85);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      padding: 8px 0 12px;
+    }
+    .tab-bar {
+      display: flex; gap: 4px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 3px;
+      box-shadow: var(--shadow-sm);
+    }
+    .tab-btn {
+      flex: 1; padding: 8px 0; border: none; background: transparent;
+      font-family: inherit; font-size: 13px; font-weight: 600;
+      color: var(--text-secondary); border-radius: 9px;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .tab-btn.active {
+      background: var(--indigo); color: #fff;
+      box-shadow: 0 2px 8px rgba(99,91,255,0.3);
+    }
+
+    /* ── Stats Row ── */
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 20px 0 24px; }
+    .stat {
+      background: var(--surface); border-radius: var(--radius); padding: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+    .stat-value { font-size: 28px; font-weight: 700; letter-spacing: -1px; line-height: 1; }
+    .stat-value.indigo { color: var(--indigo); }
+    .stat-value.green { color: var(--green); }
+    .stat-value.orange { color: var(--orange); }
+    .stat-value.pink { color: var(--pink); }
+    .stat-label { font-size: 11px; font-weight: 500; color: var(--text-tertiary); margin-top: 4px; }
+
+    /* ── Sections ── */
+    .tab-content { display: none; padding-bottom: 40px; }
+    .tab-content.active { display: block; }
+
+    .section-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 12px; margin-top: 24px;
+    }
+    .section-title { font-size: 20px; font-weight: 600; letter-spacing: -0.4px; }
+    .section-badge {
+      font-size: 11px; font-weight: 500; color: var(--text-tertiary);
+      background: var(--border-light); padding: 3px 10px; border-radius: 100px;
+    }
+
+    /* ── Timeline ── */
+    .timeline-card {
+      background: var(--surface); border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-md); padding: 20px; overflow-x: auto;
+    }
+    .timeline {
+      display: grid; grid-template-columns: 130px repeat(9, 1fr);
+      gap: 0; min-width: 640px;
+    }
+    .tl-head {
+      padding: 0 0 12px; text-align: center; font-size: 10px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.5px;
+      color: var(--text-tertiary); border-bottom: 1px solid var(--border);
+    }
+    .tl-head:first-child { text-align: left; }
+    .tl-head .day-num {
+      display: block; font-size: 16px; font-weight: 700;
+      color: var(--text-primary); letter-spacing: -0.5px; margin-bottom: 1px; text-transform: none;
+    }
+    .tl-head.is-weekend .day-num { color: var(--indigo); }
+
+    .tl-name {
+      padding: 10px 12px 10px 0; display: flex; align-items: center; gap: 8px;
+      border-bottom: 1px solid var(--border-light); font-size: 12px;
+      font-weight: 600; white-space: nowrap;
+    }
+    .tl-name.is-groom { color: var(--indigo); }
+    .tl-avatar {
+      width: 24px; height: 24px; border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 10px; color: #fff; flex-shrink: 0;
+    }
+    .tl-name .crown { font-size: 12px; margin-left: -2px; }
+
+    .tl-cell {
+      padding: 10px 2px; display: flex; align-items: center;
+      justify-content: center; border-bottom: 1px solid var(--border-light);
+    }
+    .tl-bar {
+      width: 100%; height: 22px; border-radius: 6px;
+      display: flex; align-items: center; justify-content: center; gap: 1px;
+    }
+    .tl-bar.active { background: var(--indigo-bg2); }
+    .tl-bar.is-groom-bar { background: linear-gradient(135deg, rgba(99,91,255,0.18), rgba(175,82,222,0.14)); }
+    .tl-bar.first { border-radius: 6px 0 0 6px; margin-right: -2px; }
+    .tl-bar.middle { border-radius: 0; margin: 0 -2px; }
+    .tl-bar.last { border-radius: 0 6px 6px 0; margin-left: -2px; }
+    .tl-bar.single { border-radius: 6px; }
+    .tl-bar.uncertain {
+      background-image: repeating-linear-gradient(90deg, transparent, transparent 4px, rgba(99,91,255,0.08) 4px, rgba(99,91,255,0.08) 8px);
+    }
+    .tl-bar .plane { font-size: 10px; line-height: 1; opacity: 0.5; }
+    .tl-bar .plane-arr { font-size: 10px; line-height: 1; opacity: 0.5; transform: scaleX(-1); display: inline-block; }
+
+    .tl-counter-label {
+      padding: 14px 12px 10px 0; font-size: 11px; font-weight: 600;
+      color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .tl-counter-cell { padding: 14px 2px 10px; display: flex; align-items: center; justify-content: center; }
+    .tl-count {
+      width: 28px; height: 28px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 13px;
+    }
+    .tl-count.high { background: var(--indigo); color: #fff; }
+    .tl-count.mid { background: var(--indigo-bg2); color: var(--indigo); }
+    .tl-count.low { background: var(--border-light); color: var(--text-secondary); }
+    .tl-count.zero { color: var(--text-tertiary); }
+
+    /* ── Cards (Dates tab) ── */
+    .cards-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 10px;
+    }
+    .p-card {
+      background: var(--surface); border-radius: var(--radius);
+      padding: 16px; box-shadow: var(--shadow-sm);
+      border: 1px solid transparent; transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .p-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-1px); }
+    .p-card.is-groom { border: 1.5px solid var(--indigo); background: linear-gradient(180deg, rgba(99,91,255,0.03), var(--surface)); }
+    .p-card.is-tbd { opacity: 0.55; border: 1.5px dashed var(--border); }
+
+    .p-card-top { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+    .p-card-avatar {
+      width: 36px; height: 36px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 13px; color: #fff; flex-shrink: 0;
+    }
+    .p-card-name { font-size: 14px; font-weight: 600; letter-spacing: -0.2px; }
+    .p-card-tag {
+      display: inline-block; font-size: 10px; font-weight: 600;
+      padding: 2px 7px; border-radius: 5px; margin-top: 2px;
+    }
+    .p-card-tag.groom-tag { background: var(--indigo-bg); color: var(--indigo); }
+    .p-card-tag.uncertain-tag { background: var(--orange-bg); color: var(--orange); }
+    .p-card-tag.tbd-tag { background: var(--red-bg); color: var(--red); }
+
+    .p-card-dates { display: flex; align-items: center; gap: 6px; }
+    .p-card-date { flex: 1; background: var(--bg); border-radius: 8px; padding: 8px; text-align: center; }
+    .p-card-date-label { font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-tertiary); margin-bottom: 2px; }
+    .p-card-date-value { font-size: 15px; font-weight: 700; letter-spacing: -0.5px; }
+    .p-card-date-day { font-size: 10px; font-weight: 500; color: var(--text-tertiary); margin-top: 1px; }
+    .p-card-arrow { color: var(--text-tertiary); font-size: 14px; flex-shrink: 0; }
+    .p-card-nights { text-align: center; font-size: 11px; font-weight: 600; color: var(--indigo); margin-top: 10px; }
+    .p-card-tbd-msg { text-align: center; color: var(--text-tertiary); font-size: 12px; font-weight: 500; padding: 12px 0 2px; }
+
+    /* ── Programme ── */
+    .day-card {
+      background: var(--surface); border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm); padding: 20px; margin-bottom: 12px;
+      border: 1px solid transparent;
+    }
+    .day-card.has-event { border-color: var(--indigo); }
+    .day-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+    .day-card-date { font-size: 11px; font-weight: 600; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.5px; }
+    .day-card-title { font-size: 18px; font-weight: 700; letter-spacing: -0.4px; }
+    .day-card-count {
+      font-size: 11px; font-weight: 600; color: var(--indigo);
+      background: var(--indigo-bg); padding: 3px 10px; border-radius: 100px;
+    }
+
+    .day-slots { display: flex; flex-direction: column; gap: 8px; }
+    .day-slot {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px; background: var(--bg); border-radius: 10px;
+    }
+    .day-slot.highlight {
+      background: linear-gradient(135deg, rgba(99,91,255,0.08), rgba(175,82,222,0.06));
+      border: 1px solid rgba(99,91,255,0.15);
+    }
+    .day-slot-icon { font-size: 20px; flex-shrink: 0; width: 32px; text-align: center; }
+    .day-slot-info { flex: 1; }
+    .day-slot-time { font-size: 11px; font-weight: 600; color: var(--text-tertiary); }
+    .day-slot-name { font-size: 14px; font-weight: 600; letter-spacing: -0.2px; }
+    .day-slot-desc { font-size: 12px; color: var(--text-secondary); margin-top: 1px; }
+    .day-slot-badge {
+      font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 6px;
+      flex-shrink: 0;
+    }
+    .badge-fete { background: rgba(175,82,222,0.1); color: var(--pink); }
+    .badge-resto { background: var(--orange-bg); color: var(--orange); }
+    .badge-activite { background: var(--green-bg); color: var(--green); }
+    .badge-plage { background: rgba(0,122,255,0.08); color: #007aff; }
+    .badge-libre { background: var(--border-light); color: var(--text-tertiary); }
+
+    .status-tag {
+      display: inline-block; font-size: 9px; font-weight: 700; padding: 2px 7px;
+      border-radius: 5px; margin-left: 6px; vertical-align: middle; letter-spacing: 0.3px;
+      text-transform: uppercase;
+    }
+    .status-confirmed { background: var(--green-bg); color: var(--green); }
+    .status-pending { background: var(--orange-bg); color: var(--orange); }
+    .status-vote { background: var(--indigo-bg); color: var(--indigo); }
+
+    .day-slot-empty {
+      padding: 16px; text-align: center; color: var(--text-tertiary);
+      font-size: 13px; font-weight: 500; font-style: italic;
+    }
+
+    /* ── Logement ── */
+    .housing-block {
+      background: var(--surface); border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md); padding: 20px; margin-bottom: 16px;
+    }
+    .housing-title { font-size: 17px; font-weight: 700; letter-spacing: -0.3px; margin-bottom: 4px; }
+    .housing-subtitle { font-size: 12px; color: var(--text-secondary); margin-bottom: 16px; }
+
+    .room-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+
+    .room-card {
+      background: var(--bg); border-radius: var(--radius);
+      padding: 14px; min-height: 90px; cursor: pointer;
+      border: 2px solid transparent; transition: border-color 0.15s, background 0.15s;
+    }
+    .room-card.drop-target { border-color: var(--indigo); background: var(--indigo-bg); }
+    .room-card-label {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.5px; color: var(--text-tertiary); margin-bottom: 8px;
+    }
+    .room-occupants { display: flex; flex-direction: column; gap: 4px; }
+
+    .occupant-chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--surface); border-radius: 8px; padding: 6px 10px;
+      font-size: 12px; font-weight: 600; cursor: pointer;
+      border: 1.5px solid transparent; transition: all 0.15s;
+      box-shadow: var(--shadow-sm);
+    }
+    .occupant-chip:active { transform: scale(0.97); }
+    .occupant-chip.selected {
+      border-color: var(--indigo); background: var(--indigo-bg);
+      box-shadow: 0 0 0 3px rgba(99,91,255,0.15);
+    }
+    .occupant-chip .chip-dot {
+      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+    }
+
+    .room-empty {
+      font-size: 11px; color: var(--text-tertiary); font-style: italic;
+      padding: 8px 0;
+    }
+
+    .unassigned-pool {
+      background: var(--surface); border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm); padding: 16px; margin-bottom: 16px;
+      border: 1.5px dashed var(--border);
+    }
+    .unassigned-label {
+      font-size: 12px; font-weight: 600; color: var(--text-tertiary);
+      margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .unassigned-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+
+    .housing-hint {
+      text-align: center; font-size: 12px; color: var(--text-tertiary);
+      margin-top: 16px; font-weight: 500;
+    }
+
+    /* ── Footer ── */
+    .footer { text-align: center; padding: 24px 0; font-size: 11px; color: var(--text-tertiary); font-weight: 500; }
+
+    @media (max-width: 700px) {
+      .hero h1 { font-size: 32px; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .cards-grid { grid-template-columns: 1fr; }
+      .room-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <div class="hero">
+      <div class="hero-pill"><span class="dot"></span> Enterrement de vie de gar&#231;on</div>
+      <h1>EVG Sam &#x1F451;</h1>
+      <div class="hero-sub">Tel Aviv &middot; 28 f&#233;vrier &mdash; 8 mars 2026</div>
+    </div>
+
+    <div class="tab-bar-wrap">
+      <div class="tab-bar">
+        <button class="tab-btn active" data-tab="dates">Dates</button>
+        <button class="tab-btn" data-tab="programme">Programme</button>
+        <button class="tab-btn" data-tab="logement">Logement</button>
+      </div>
+    </div>
+
+    <!-- ═══ TAB: DATES ═══ -->
+    <div class="tab-content active" id="tab-dates">
+      <div class="stats-row" id="stats"></div>
+      <div class="section-header">
+        <h2 class="section-title">Pr&#233;sences</h2>
+        <span class="section-badge" id="date-range-badge"></span>
+      </div>
+      <div class="timeline-card"><div class="timeline" id="timeline"></div></div>
+      <div class="section-header">
+        <h2 class="section-title">Participants</h2>
+        <span class="section-badge" id="participant-count-badge"></span>
+      </div>
+      <div class="cards-grid" id="cards"></div>
+    </div>
+
+    <!-- ═══ TAB: PROGRAMME ═══ -->
+    <div class="tab-content" id="tab-programme">
+      <div id="programme-list" style="margin-top:20px;"></div>
+    </div>
+
+    <!-- ═══ TAB: LOGEMENT ═══ -->
+    <div class="tab-content" id="tab-logement">
+      <div id="logement-content" style="margin-top:20px;"></div>
+    </div>
+
+    <div class="footer">EVG Sam Katz &mdash; Tel Aviv 2026</div>
+  </div>
+
+<script>
+// ════════════════════════════════════════
+// DATA
+// ════════════════════════════════════════
+var participants = [
+  { id: "sam",      name: "Sam Katz",        arrival: "28/02", departure: "08/03", groom: true },
+  { id: "charles",  name: "Charles Krzento", arrival: "28/02", departure: "08/03" },
+  { id: "olivier",  name: "Olivier Azan",    arrival: "28/02", departure: "06/03" },
+  { id: "jonas",    name: "Jonas Adda",      arrival: "28/02", departure: "04/03", separate: true },
+  { id: "arthur",   name: "Arthur Cohen",    arrival: "01/03", departure: "06/03" },
+  { id: "dadou",    name: "Dadou Levy",      arrival: "01/03", departure: "06/03", uncertainDep: "D\u00e9part 6 ou 8 mars" },
+  { id: "anthony",  name: "Anthony Danant",  arrival: "01/03", departure: "06/03" },
+  { id: "frank",    name: "Frank Narbo",     arrival: "01/03", departure: "06/03" },
+  { id: "paul",     name: "Paul Albou",      arrival: "01/03", departure: "04/03", separate: true },
+  { id: "roman",    name: "Roman Ichbia",    arrival: "01/03", departure: "05/03", uncertainDep: "D\u00e9part 5 ou 6 mars" },
+  { id: "mathis",   name: "Mathis Criq",     arrival: "02/03", departure: "08/03" },
+  { id: "manu",     name: "Manu Gunther",    arrival: "03/03", departure: "08/03" },
+  { id: "ben",      name: "Ben Chiche",      arrival: null,    departure: null, tbd: true },
+];
+
+var programme = [
+  { date: "28/02", title: "Samedi 28 f\u00e9vrier", slots: [
+    { icon: "\uD83D\uDEEC", time: "Journ\u00e9e", name: "Arriv\u00e9es", desc: "Sam, Charles, Olivier, Jonas", badge: "" },
+  ]},
+  { date: "01/03", title: "Dimanche 1er mars", slots: [
+    { icon: "\uD83D\uDEEC", time: "Journ\u00e9e", name: "Arriv\u00e9es", desc: "Arthur, Dadou, Anthony, Frank, Paul, Roman", badge: "" },
+    { icon: "\uD83C\uDF7D\uFE0F", time: "21h", name: "Romano", desc: "R\u00e9serv\u00e9 pour 12", badge: "resto", highlight: false, status: "confirmed" },
+  ]},
+  { date: "02/03", title: "Lundi 2 mars", slots: [
+    { icon: "\uD83D\uDEEC", time: "Journ\u00e9e", name: "Arriv\u00e9e Mathis", desc: "", badge: "" },
+  ]},
+  { date: "03/03", title: "Mardi 3 mars", highlight: true, slots: [
+    { icon: "\uD83D\uDEEC", time: "Journ\u00e9e", name: "Arriv\u00e9e Manu", desc: "", badge: "" },
+    { icon: "\uD83C\uDF89", time: "Soir\u00e9e", name: "Taltalistim", desc: "J\u00e9rusalem", badge: "f\u00eate", highlight: true, status: "pending" },
+  ]},
+  { date: "04/03", title: "Mercredi 4 mars", slots: [
+    { icon: "\uD83D\uDEEB", time: "Journ\u00e9e", name: "D\u00e9parts Jonas & Paul", desc: "", badge: "" },
+  ]},
+  { date: "05/03", title: "Jeudi 5 mars", slots: [
+    { icon: "\uD83C\uDF7D\uFE0F", time: "13h", name: "Cassis", desc: "Jaffa \u00b7 1 table de 6 + 1 table de 4", badge: "resto", highlight: false, status: "confirmed" },
+    { icon: "\uD83C\uDF7D\uFE0F", time: "Soir\u00e9e", name: "HaSalon", desc: "", badge: "resto", highlight: false, status: "vote" },
+  ]},
+  { date: "06/03", title: "Vendredi 6 mars", slots: [
+    { icon: "\uD83D\uDEEB", time: "Journ\u00e9e", name: "D\u00e9parts", desc: "Olivier, Arthur, Dadou, Anthony, Frank", badge: "" },
+  ]},
+  { date: "07/03", title: "Samedi 7 mars", slots: []},
+  { date: "08/03", title: "Dimanche 8 mars", slots: [
+    { icon: "\uD83D\uDEEB", time: "Journ\u00e9e", name: "D\u00e9parts", desc: "Sam, Charles, Mathis, Manu", badge: "" },
+  ]},
+];
+
+var dayNamesShort = ["dim.", "lun.", "mar.", "mer.", "jeu.", "ven.", "sam."];
+var dayNamesFull = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
+var monthNames = ["", "f\u00e9v.", "mars"];
+var palette = [
+  "#635bff", "#0a84ff", "#34c759", "#af52de", "#ff6482",
+  "#30b0c7", "#ff9500", "#5856d6", "#ff2d55", "#64d2ff",
+  "#bf5af2", "#32d74b", "#007aff"
+];
+
+var dates = [{ label: "28/02", day: new Date(2026, 1, 28) }];
+for (var d = 1; d <= 8; d++) {
+  var pad = d < 10 ? "0" + d : "" + d;
+  dates.push({ label: pad + "/03", day: new Date(2026, 2, d) });
+}
+
+function parseDate(str) {
+  if (!str) return null;
+  var parts = str.split("/");
+  return new Date(2026, parseInt(parts[1], 10) - 1, parseInt(parts[0], 10));
+}
+function isPresent(p, date) {
+  var a = parseDate(p.arrival), d = parseDate(p.departure);
+  if (!a || !d) return false;
+  return date >= a && date <= d;
+}
+function isDepartureDay(p, date) {
+  var d = parseDate(p.departure);
+  return d && date.getTime() === d.getTime();
+}
+function isArrivalDay(p, date) {
+  var a = parseDate(p.arrival);
+  return a && date.getTime() === a.getTime();
+}
+function nightCount(p) {
+  var a = parseDate(p.arrival), d = parseDate(p.departure);
+  if (!a || !d) return 0;
+  return Math.round((d - a) / 86400000);
+}
+function getInitials(n) { return n.split(" ").map(function(w){return w[0];}).join("").toUpperCase(); }
+function getColor(i, groom) { return groom ? "#635bff" : palette[(i) % palette.length]; }
+
+// Build a stable color map by participant id
+var colorMap = {};
+var colorIdx = 0;
+participants.forEach(function(p) {
+  colorMap[p.id] = getColor(colorIdx, p.groom);
+  colorIdx++;
+});
+
+// ════════════════════════════════════════
+// TABS
+// ════════════════════════════════════════
+document.querySelectorAll(".tab-btn").forEach(function(btn) {
+  btn.addEventListener("click", function() {
+    document.querySelectorAll(".tab-btn").forEach(function(b) { b.classList.remove("active"); });
+    document.querySelectorAll(".tab-content").forEach(function(c) { c.classList.remove("active"); });
+    btn.classList.add("active");
+    document.getElementById("tab-" + btn.dataset.tab).classList.add("active");
+  });
+});
+
+// ════════════════════════════════════════
+// TAB: DATES
+// ════════════════════════════════════════
+var confirmed = participants.filter(function(p){return !p.tbd;}).length;
+var pending = participants.filter(function(p){return p.tbd;}).length;
+var peakCount = 0;
+dates.forEach(function(d) {
+  var c = participants.filter(function(p){return isPresent(p, d.day);}).length;
+  if (c > peakCount) peakCount = c;
+});
+var totalNights = participants.reduce(function(s,p){return s+nightCount(p);}, 0);
+
+var statsEl = document.getElementById("stats");
+[
+  { v: confirmed, l: "Confirm\u00e9s", c: "indigo" },
+  { v: pending, l: "En attente", c: "orange" },
+  { v: peakCount, l: "Max ensemble", c: "pink" },
+  { v: totalNights, l: "Nuits au total", c: "green" },
+].forEach(function(s) {
+  var card = document.createElement("div"); card.className = "stat";
+  var val = document.createElement("div"); val.className = "stat-value " + s.c; val.textContent = s.v;
+  var lbl = document.createElement("div"); lbl.className = "stat-label"; lbl.textContent = s.l;
+  card.appendChild(val); card.appendChild(lbl); statsEl.appendChild(card);
+});
+
+document.getElementById("date-range-badge").textContent = "9 jours";
+document.getElementById("participant-count-badge").textContent = participants.length + " personnes";
+
+// Timeline
+var tl = document.getElementById("timeline");
+var thE = document.createElement("div"); thE.className = "tl-head"; tl.appendChild(thE);
+dates.forEach(function(d) {
+  var th = document.createElement("div");
+  var dow = d.day.getDay();
+  th.className = "tl-head" + ((dow===5||dow===6) ? " is-weekend":"");
+  var ns = document.createElement("span"); ns.className = "day-num"; ns.textContent = d.day.getDate();
+  th.appendChild(ns);
+  th.appendChild(document.createTextNode(dayNamesShort[dow]+" "+monthNames[d.day.getMonth()]));
+  tl.appendChild(th);
+});
+
+var sorted = participants.filter(function(p){return !p.tbd;}).sort(function(a,b) {
+  if (a.groom) return -1; if (b.groom) return 1;
+  return a.name.localeCompare(b.name, "fr");
+});
+
+sorted.forEach(function(p) {
+  var color = colorMap[p.id];
+  var ne = document.createElement("div"); ne.className = "tl-name"+(p.groom?" is-groom":"");
+  var av = document.createElement("div"); av.className = "tl-avatar"; av.style.background = color;
+  av.textContent = getInitials(p.name);
+  ne.appendChild(av);
+  ne.appendChild(document.createTextNode(p.name.split(" ")[0]));
+  if (p.groom) { var cr = document.createElement("span"); cr.className = "crown"; cr.textContent = "\uD83D\uDC51"; ne.appendChild(cr); }
+  tl.appendChild(ne);
+
+  var act = dates.map(function(d){return isPresent(p, d.day);});
+  dates.forEach(function(d, di) {
+    var cell = document.createElement("div"); cell.className = "tl-cell";
+    var bar = document.createElement("div"); bar.className = "tl-bar";
+    if (act[di]) {
+      var prev = di>0 && act[di-1], next = di<dates.length-1 && act[di+1];
+      var shape = "single";
+      if (prev && next) shape="middle"; else if (!prev && next) shape="first"; else if (prev && !next) shape="last";
+      bar.classList.add("active", shape);
+      if (p.groom) bar.classList.add("is-groom-bar");
+      if (p.uncertainDep && shape==="last") bar.classList.add("uncertain");
+      if (isArrivalDay(p, d.day)) { var pi = document.createElement("span"); pi.className="plane-arr"; pi.textContent="\uD83D\uDEEC"; bar.appendChild(pi); }
+      if (isDepartureDay(p, d.day)) { var po = document.createElement("span"); po.className="plane"; po.textContent="\uD83D\uDEEB"; bar.appendChild(po); }
+    }
+    cell.appendChild(bar); tl.appendChild(cell);
+  });
+});
+
+var cl = document.createElement("div"); cl.className = "tl-counter-label"; cl.textContent = "Pr\u00e9sents"; tl.appendChild(cl);
+dates.forEach(function(d) {
+  var count = participants.filter(function(p){return isPresent(p, d.day);}).length;
+  var cell = document.createElement("div"); cell.className = "tl-counter-cell";
+  var b = document.createElement("div"); b.className = "tl-count";
+  if (count>=10) b.classList.add("high"); else if (count>=5) b.classList.add("mid"); else if (count>0) b.classList.add("low"); else b.classList.add("zero");
+  b.textContent = count; cell.appendChild(b); tl.appendChild(cell);
+});
+
+// Cards
+var cardsEl = document.getElementById("cards");
+var cardsSorted = participants.slice().sort(function(a,b) {
+  if (a.groom) return -1; if (b.groom) return 1;
+  if (a.tbd && !b.tbd) return 1; if (!a.tbd && b.tbd) return -1;
+  return a.name.localeCompare(b.name, "fr");
+});
+cardsSorted.forEach(function(p) {
+  var color = colorMap[p.id];
+  var card = document.createElement("div");
+  card.className = "p-card"+(p.groom?" is-groom":"")+(p.tbd?" is-tbd":"");
+  var top = document.createElement("div"); top.className = "p-card-top";
+  var av = document.createElement("div"); av.className = "p-card-avatar"; av.style.background = color; av.textContent = getInitials(p.name);
+  top.appendChild(av);
+  var info = document.createElement("div");
+  var nm = document.createElement("div"); nm.className = "p-card-name"; nm.textContent = p.groom ? p.name+" \uD83D\uDC51" : p.name;
+  info.appendChild(nm);
+  if (p.groom) { var t=document.createElement("div"); t.className="p-card-tag groom-tag"; t.textContent="Le mari\u00e9"; info.appendChild(t); }
+  else if (p.tbd) { var t=document.createElement("div"); t.className="p-card-tag tbd-tag"; t.textContent="Pas encore confirm\u00e9"; info.appendChild(t); }
+  else if (p.uncertainDep) { var t=document.createElement("div"); t.className="p-card-tag uncertain-tag"; t.textContent=p.uncertainDep; info.appendChild(t); }
+  top.appendChild(info); card.appendChild(top);
+  if (p.tbd) {
+    var msg=document.createElement("div"); msg.className="p-card-tbd-msg"; msg.textContent="Dates \u00e0 confirmer"; card.appendChild(msg);
+  } else {
+    var row=document.createElement("div"); row.className="p-card-dates";
+    var ab=document.createElement("div"); ab.className="p-card-date";
+    var al=document.createElement("div"); al.className="p-card-date-label"; al.textContent="Arriv\u00e9e \uD83D\uDEEC";
+    var av2=document.createElement("div"); av2.className="p-card-date-value"; av2.textContent=p.arrival;
+    var ad=document.createElement("div"); ad.className="p-card-date-day"; ad.textContent=dayNamesFull[parseDate(p.arrival).getDay()];
+    ab.appendChild(al); ab.appendChild(av2); ab.appendChild(ad);
+    var arrow=document.createElement("span"); arrow.className="p-card-arrow"; arrow.textContent="\u2192";
+    var db=document.createElement("div"); db.className="p-card-date";
+    var dl=document.createElement("div"); dl.className="p-card-date-label"; dl.textContent="D\u00e9part \uD83D\uDEEB";
+    var dv=document.createElement("div"); dv.className="p-card-date-value"; dv.textContent=p.departure;
+    var dd=document.createElement("div"); dd.className="p-card-date-day"; dd.textContent=dayNamesFull[parseDate(p.departure).getDay()];
+    db.appendChild(dl); db.appendChild(dv); db.appendChild(dd);
+    row.appendChild(ab); row.appendChild(arrow); row.appendChild(db); card.appendChild(row);
+    var n=nightCount(p);
+    var ne=document.createElement("div"); ne.className="p-card-nights"; ne.textContent=n+" nuit"+(n>1?"s":"");
+    card.appendChild(ne);
+  }
+  cardsEl.appendChild(card);
+});
+
+// ════════════════════════════════════════
+// TAB: PROGRAMME
+// ════════════════════════════════════════
+var progEl = document.getElementById("programme-list");
+
+programme.forEach(function(day) {
+  var card = document.createElement("div");
+  card.className = "day-card" + (day.highlight ? " has-event" : "");
+
+  var header = document.createElement("div"); header.className = "day-card-header";
+  var left = document.createElement("div");
+  var dateLabel = document.createElement("div"); dateLabel.className = "day-card-date"; dateLabel.textContent = day.date;
+  var title = document.createElement("div"); title.className = "day-card-title"; title.textContent = day.title;
+  left.appendChild(dateLabel); left.appendChild(title);
+
+  var dateObj = parseDate(day.date);
+  var count = participants.filter(function(p){return isPresent(p, dateObj);}).length;
+  var countBadge = document.createElement("div"); countBadge.className = "day-card-count";
+  countBadge.textContent = count + " pr\u00e9sents";
+
+  header.appendChild(left); header.appendChild(countBadge);
+  card.appendChild(header);
+
+  var slotsDiv = document.createElement("div"); slotsDiv.className = "day-slots";
+
+  if (day.slots.length === 0) {
+    var empty = document.createElement("div"); empty.className = "day-slot-empty";
+    empty.textContent = "\u00c0 planifier...";
+    slotsDiv.appendChild(empty);
+  } else {
+    day.slots.forEach(function(slot) {
+      var s = document.createElement("div");
+      s.className = "day-slot" + (slot.highlight ? " highlight" : "");
+      var icon = document.createElement("div"); icon.className = "day-slot-icon"; icon.textContent = slot.icon;
+      var info = document.createElement("div"); info.className = "day-slot-info";
+      var time = document.createElement("div"); time.className = "day-slot-time"; time.textContent = slot.time;
+      var name = document.createElement("div"); name.className = "day-slot-name"; name.textContent = slot.name;
+      info.appendChild(time);
+      if (slot.status) {
+        var statusLabels = { confirmed: "Confirm\u00e9", pending: "En attente", vote: "\u00c0 valider" };
+        var stag = document.createElement("span"); stag.className = "status-tag status-" + slot.status;
+        stag.textContent = statusLabels[slot.status] || slot.status;
+        name.appendChild(stag);
+      }
+      info.appendChild(name);
+      if (slot.desc) { var desc = document.createElement("div"); desc.className = "day-slot-desc"; desc.textContent = slot.desc; info.appendChild(desc); }
+      s.appendChild(icon); s.appendChild(info);
+      if (slot.badge) {
+        var bdg = document.createElement("div");
+        bdg.className = "day-slot-badge badge-" + (slot.badge === "f\u00eate" ? "fete" : slot.badge);
+        bdg.textContent = slot.badge.charAt(0).toUpperCase() + slot.badge.slice(1);
+        s.appendChild(bdg);
+      }
+      slotsDiv.appendChild(s);
+    });
+  }
+
+  card.appendChild(slotsDiv);
+  progEl.appendChild(card);
+});
+
+// ════════════════════════════════════════
+// TAB: LOGEMENT (interactive rooms)
+// ════════════════════════════════════════
+var ROOMS_KEY = "evgsam_rooms_v2";
+var NUM_ROOMS = 6;
+
+// People at Sam's = everyone except separate (tBD included, they need a room too)
+var samGuests = participants.filter(function(p){ return !p.separate; }).map(function(p){ return p.id; });
+var separateGuests = participants.filter(function(p){ return p.separate; });
+
+function loadRooms() {
+  try {
+    var saved = localStorage.getItem(ROOMS_KEY);
+    if (saved) return JSON.parse(saved);
+  } catch(e) {}
+  // Default: everyone unassigned
+  var rooms = [];
+  for (var i = 0; i < NUM_ROOMS; i++) rooms.push([]);
+  return rooms;
+}
+
+function saveRooms(rooms) {
+  try { localStorage.setItem(ROOMS_KEY, JSON.stringify(rooms)); } catch(e) {}
+}
+
+var selectedPerson = null;
+
+function findPerson(id) {
+  return participants.find(function(p){ return p.id === id; });
+}
+
+function getUnassigned(rooms) {
+  var assigned = [];
+  rooms.forEach(function(r){ assigned = assigned.concat(r); });
+  return samGuests.filter(function(id){ return assigned.indexOf(id) === -1; });
+}
+
+function renderLogement() {
+  var rooms = loadRooms();
+  var el = document.getElementById("logement-content");
+  // Clear
+  while (el.firstChild) el.removeChild(el.firstChild);
+
+  // Hint
+  var hint = document.createElement("div"); hint.className = "housing-hint";
+  hint.textContent = "Tape sur un nom pour le s\u00e9lectionner, puis tape sur une chambre pour le placer.";
+  hint.style.marginBottom = "16px"; hint.style.marginTop = "0";
+  el.appendChild(hint);
+
+  // Unassigned pool
+  var unassigned = getUnassigned(rooms);
+  var pool = document.createElement("div"); pool.className = "unassigned-pool";
+  var poolLabel = document.createElement("div"); poolLabel.className = "unassigned-label";
+  poolLabel.textContent = "\u00c0 placer (" + unassigned.length + ")";
+  pool.appendChild(poolLabel);
+  var chips = document.createElement("div"); chips.className = "unassigned-chips";
+  unassigned.forEach(function(id) {
+    var p = findPerson(id);
+    var chip = document.createElement("div"); chip.className = "occupant-chip" + (selectedPerson === id ? " selected" : "");
+    var dot = document.createElement("span"); dot.className = "chip-dot"; dot.style.background = colorMap[id];
+    chip.appendChild(dot);
+    chip.appendChild(document.createTextNode(p.name.split(" ")[0]));
+    if (p.tbd) {
+      var tbdSpan = document.createElement("span");
+      tbdSpan.style.cssText = "font-size:9px;color:var(--red);font-weight:600;margin-left:2px;";
+      tbdSpan.textContent = "?";
+      chip.appendChild(tbdSpan);
+      chip.style.opacity = "0.65";
+      chip.style.borderStyle = "dashed";
+    }
+    chip.addEventListener("click", function(e) { e.stopPropagation(); selectedPerson = id; renderLogement(); });
+    chips.appendChild(chip);
+  });
+  if (unassigned.length === 0) {
+    var allGood = document.createElement("div"); allGood.style.cssText = "font-size:13px;color:var(--green);font-weight:600;";
+    allGood.textContent = "Tout le monde est plac\u00e9 \u2714";
+    chips.appendChild(allGood);
+  }
+  pool.appendChild(chips);
+  el.appendChild(pool);
+
+  // Sam's place
+  var samBlock = document.createElement("div"); samBlock.className = "housing-block";
+  var samTitle = document.createElement("div"); samTitle.className = "housing-title";
+  samTitle.textContent = "Chez Sam \uD83C\uDFE0";
+  var samSub = document.createElement("div"); samSub.className = "housing-subtitle";
+  samSub.textContent = "6 chambres \u00b7 " + (samGuests.length - unassigned.length) + "/" + samGuests.length + " plac\u00e9s";
+  samBlock.appendChild(samTitle); samBlock.appendChild(samSub);
+
+  var grid = document.createElement("div"); grid.className = "room-grid";
+
+  for (var i = 0; i < NUM_ROOMS; i++) {
+    (function(roomIdx) {
+      var rc = document.createElement("div"); rc.className = "room-card";
+      var label = document.createElement("div"); label.className = "room-card-label";
+      label.textContent = "Chambre " + (roomIdx + 1);
+      rc.appendChild(label);
+
+      var occs = document.createElement("div"); occs.className = "room-occupants";
+      var roomPeople = rooms[roomIdx] || [];
+
+      if (roomPeople.length === 0) {
+        var empty = document.createElement("div"); empty.className = "room-empty"; empty.textContent = "Vide";
+        occs.appendChild(empty);
+      } else {
+        roomPeople.forEach(function(id) {
+          var p = findPerson(id);
+          if (!p) return;
+          var chip = document.createElement("div"); chip.className = "occupant-chip" + (selectedPerson === id ? " selected" : "");
+          var dot = document.createElement("span"); dot.className = "chip-dot"; dot.style.background = colorMap[id];
+          chip.appendChild(dot);
+          chip.appendChild(document.createTextNode(p.name.split(" ")[0]));
+          if (p.tbd) {
+            var tbdSpan = document.createElement("span");
+            tbdSpan.style.cssText = "font-size:9px;color:var(--red);font-weight:600;margin-left:2px;";
+            tbdSpan.textContent = "?";
+            chip.appendChild(tbdSpan);
+            chip.style.opacity = "0.65";
+            chip.style.borderStyle = "dashed";
+          }
+          chip.addEventListener("click", function(e) {
+            e.stopPropagation();
+            if (selectedPerson === id) {
+              // Deselect and move back to unassigned
+              rooms[roomIdx] = rooms[roomIdx].filter(function(x){return x!==id;});
+              saveRooms(rooms); selectedPerson = null; renderLogement();
+            } else {
+              selectedPerson = id; renderLogement();
+            }
+          });
+          occs.appendChild(chip);
+        });
+      }
+      rc.appendChild(occs);
+
+      // Click room to place selected person
+      rc.addEventListener("click", function() {
+        if (!selectedPerson) return;
+        // Remove from any current room
+        for (var r = 0; r < rooms.length; r++) {
+          rooms[r] = rooms[r].filter(function(x){return x!==selectedPerson;});
+        }
+        rooms[roomIdx].push(selectedPerson);
+        saveRooms(rooms); selectedPerson = null; renderLogement();
+      });
+
+      // Visual hint
+      if (selectedPerson) {
+        rc.classList.add("drop-target");
+      }
+
+      grid.appendChild(rc);
+    })(i);
+  }
+  samBlock.appendChild(grid);
+  el.appendChild(samBlock);
+
+  // Separate apartment
+  var sepBlock = document.createElement("div"); sepBlock.className = "housing-block";
+  var sepTitle = document.createElement("div"); sepTitle.className = "housing-title";
+  sepTitle.textContent = "Appartement s\u00e9par\u00e9 \uD83C\uDFE2";
+  var sepSub = document.createElement("div"); sepSub.className = "housing-subtitle";
+  sepSub.textContent = "Jonas & Paul";
+  sepBlock.appendChild(sepTitle); sepBlock.appendChild(sepSub);
+
+  var sepChips = document.createElement("div"); sepChips.style.cssText = "display:flex;gap:8px;flex-wrap:wrap;";
+  separateGuests.forEach(function(p) {
+    var chip = document.createElement("div"); chip.className = "occupant-chip";
+    var dot = document.createElement("span"); dot.className = "chip-dot"; dot.style.background = colorMap[p.id];
+    chip.appendChild(dot);
+    chip.appendChild(document.createTextNode(p.name));
+    var nights = nightCount(p);
+    var nSpan = document.createElement("span"); nSpan.style.cssText = "color:var(--text-tertiary);font-weight:500;margin-left:4px;";
+    nSpan.textContent = "(" + nights + " nuits)";
+    chip.appendChild(nSpan);
+    sepChips.appendChild(chip);
+  });
+  sepBlock.appendChild(sepChips);
+  el.appendChild(sepBlock);
+
+  // Reset button
+  var resetWrap = document.createElement("div"); resetWrap.style.cssText = "text-align:center;margin-top:16px;";
+  var resetBtn = document.createElement("button");
+  resetBtn.style.cssText = "font-family:inherit;font-size:12px;font-weight:600;color:var(--red);background:var(--red-bg);border:none;padding:8px 20px;border-radius:10px;cursor:pointer;";
+  resetBtn.textContent = "R\u00e9initialiser les chambres";
+  resetBtn.addEventListener("click", function() {
+    var fresh = [];
+    for (var i = 0; i < NUM_ROOMS; i++) fresh.push([]);
+    saveRooms(fresh); selectedPerson = null; renderLogement();
+  });
+  resetWrap.appendChild(resetBtn);
+  el.appendChild(resetWrap);
+}
+
+renderLogement();
+</script>
+</body>
+</html>
