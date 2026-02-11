@@ -701,15 +701,21 @@ var NUM_ROOMS = 6;
 var samGuests = participants.filter(function(p){ return !p.separate; }).map(function(p){ return p.id; });
 var separateGuests = participants.filter(function(p){ return p.separate; });
 
+var DEFAULT_ROOMS = [
+  ["arthur", "manu"],
+  ["anthony", "dadou"],
+  ["roman", "frank"],
+  ["charles", "mathis"],
+  ["olivier"],
+  ["sam"],
+];
+
 function loadRooms() {
   try {
     var saved = localStorage.getItem(ROOMS_KEY);
     if (saved) return JSON.parse(saved);
   } catch(e) {}
-  // Default: everyone unassigned
-  var rooms = [];
-  for (var i = 0; i < NUM_ROOMS; i++) rooms.push([]);
-  return rooms;
+  return DEFAULT_ROOMS.map(function(r){ return r.slice(); });
 }
 
 function saveRooms(rooms) {
