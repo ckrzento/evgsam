@@ -357,14 +357,14 @@
 
     <div class="tab-bar-wrap">
       <div class="tab-bar">
-        <button class="tab-btn active" data-tab="dates">Dates</button>
-        <button class="tab-btn" data-tab="programme">Programme</button>
+        <button class="tab-btn" data-tab="dates">Dates</button>
+        <button class="tab-btn active" data-tab="programme">Programme</button>
         <button class="tab-btn" data-tab="logement">Logement</button>
       </div>
     </div>
 
     <!-- ═══ TAB: DATES ═══ -->
-    <div class="tab-content active" id="tab-dates">
+    <div class="tab-content" id="tab-dates">
       <div class="stats-row" id="stats"></div>
       <div class="section-header">
         <h2 class="section-title">Pr&#233;sences</h2>
@@ -379,7 +379,7 @@
     </div>
 
     <!-- ═══ TAB: PROGRAMME ═══ -->
-    <div class="tab-content" id="tab-programme">
+    <div class="tab-content active" id="tab-programme">
       <div id="programme-list" style="margin-top:20px;"></div>
     </div>
 
@@ -408,7 +408,7 @@ var participants = [
   { id: "roman",    name: "Roman Ichbia",    arrival: "01/03", departure: "05/03", uncertainDep: "D\u00e9part 5 ou 6 mars" },
   { id: "mathis",   name: "Mathis Criq",     arrival: "02/03", departure: "08/03" },
   { id: "manu",     name: "Manu Gunther",    arrival: "03/03", departure: "08/03" },
-  { id: "ben",      name: "Ben Chiche",      arrival: "28/02", departure: "08/03", separate: true },
+  { id: "ben",      name: "Ben Chiche",      arrival: "28/02", departure: "08/03", separate: true, local: true },
 ];
 
 var programme = [
@@ -855,28 +855,51 @@ function renderLogement() {
   samBlock.appendChild(grid);
   el.appendChild(samBlock);
 
-  // Separate apartment
-  var sepBlock = document.createElement("div"); sepBlock.className = "housing-block";
-  var sepTitle = document.createElement("div"); sepTitle.className = "housing-title";
-  sepTitle.textContent = "Appartement s\u00e9par\u00e9 \uD83C\uDFE2";
-  var sepSub = document.createElement("div"); sepSub.className = "housing-subtitle";
-  sepSub.textContent = "Jonas & Paul";
-  sepBlock.appendChild(sepTitle); sepBlock.appendChild(sepSub);
+  // Separate apartment (non-local)
+  var aptGuests = separateGuests.filter(function(p){ return !p.local; });
+  if (aptGuests.length) {
+    var sepBlock = document.createElement("div"); sepBlock.className = "housing-block";
+    var sepTitle = document.createElement("div"); sepTitle.className = "housing-title";
+    sepTitle.textContent = "Appartement s\u00e9par\u00e9 \uD83C\uDFE2";
+    var sepSub = document.createElement("div"); sepSub.className = "housing-subtitle";
+    sepSub.textContent = aptGuests.map(function(p){ return p.name.split(" ")[0]; }).join(" & ");
+    sepBlock.appendChild(sepTitle); sepBlock.appendChild(sepSub);
 
-  var sepChips = document.createElement("div"); sepChips.style.cssText = "display:flex;gap:8px;flex-wrap:wrap;";
-  separateGuests.forEach(function(p) {
-    var chip = document.createElement("div"); chip.className = "occupant-chip";
-    var dot = document.createElement("span"); dot.className = "chip-dot"; dot.style.background = colorMap[p.id];
-    chip.appendChild(dot);
-    chip.appendChild(document.createTextNode(p.name));
-    var nights = nightCount(p);
-    var nSpan = document.createElement("span"); nSpan.style.cssText = "color:var(--text-tertiary);font-weight:500;margin-left:4px;";
-    nSpan.textContent = "(" + nights + " nuits)";
-    chip.appendChild(nSpan);
-    sepChips.appendChild(chip);
-  });
-  sepBlock.appendChild(sepChips);
-  el.appendChild(sepBlock);
+    var sepChips = document.createElement("div"); sepChips.style.cssText = "display:flex;gap:8px;flex-wrap:wrap;";
+    aptGuests.forEach(function(p) {
+      var chip = document.createElement("div"); chip.className = "occupant-chip";
+      var dot = document.createElement("span"); dot.className = "chip-dot"; dot.style.background = colorMap[p.id];
+      chip.appendChild(dot);
+      chip.appendChild(document.createTextNode(p.name));
+      var nights = nightCount(p);
+      var nSpan = document.createElement("span"); nSpan.style.cssText = "color:var(--text-tertiary);font-weight:500;margin-left:4px;";
+      nSpan.textContent = "(" + nights + " nuits)";
+      chip.appendChild(nSpan);
+      sepChips.appendChild(chip);
+    });
+    sepBlock.appendChild(sepChips);
+    el.appendChild(sepBlock);
+  }
+
+  // Local (lives on site)
+  var localGuests = separateGuests.filter(function(p){ return p.local; });
+  if (localGuests.length) {
+    var locBlock = document.createElement("div"); locBlock.className = "housing-block";
+    var locTitle = document.createElement("div"); locTitle.className = "housing-title";
+    locTitle.textContent = "Dort chez lui \uD83C\uDFE0";
+    locBlock.appendChild(locTitle);
+
+    var locChips = document.createElement("div"); locChips.style.cssText = "display:flex;gap:8px;flex-wrap:wrap;";
+    localGuests.forEach(function(p) {
+      var chip = document.createElement("div"); chip.className = "occupant-chip";
+      var dot = document.createElement("span"); dot.className = "chip-dot"; dot.style.background = colorMap[p.id];
+      chip.appendChild(dot);
+      chip.appendChild(document.createTextNode(p.name));
+      locChips.appendChild(chip);
+    });
+    locBlock.appendChild(locChips);
+    el.appendChild(locBlock);
+  }
 
   // Reset button
   var resetWrap = document.createElement("div"); resetWrap.style.cssText = "text-align:center;margin-top:16px;";
