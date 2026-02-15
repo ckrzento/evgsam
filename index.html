@@ -268,6 +268,7 @@
     }
     .status-confirmed { background: var(--green-bg); color: var(--green); }
     .status-pending { background: var(--orange-bg); color: var(--orange); }
+    .status-waitlist { background: var(--orange-bg); color: var(--orange); }
     .status-vote { background: var(--indigo-bg); color: var(--indigo); }
 
     .day-slot-empty {
@@ -432,7 +433,7 @@ var programme = [
   ]},
   { date: "05/03", title: "Jeudi 5 mars", slots: [
     { icon: "\uD83C\uDF7D\uFE0F", time: "13h", name: "Cassis", desc: "Jaffa \u00b7 1 table de 6 + 1 table de 4", badge: "resto", highlight: false, status: "confirmed" },
-    { icon: "\uD83C\uDF7D\uFE0F", time: "Soir\u00e9e", name: "HaSalon", desc: "", badge: "resto", highlight: false, status: "vote" },
+    { icon: "\uD83C\uDF7D\uFE0F", time: "Soir\u00e9e", name: "HaSalon", desc: "", badge: "resto", highlight: false, status: "waitlist" },
   ]},
   { date: "06/03", title: "Vendredi 6 mars", slots: [
     { icon: "\uD83D\uDEEB", time: "Journ\u00e9e", name: "D\u00e9parts", desc: "Olivier, Arthur, Dadou, Anthony, Frank", badge: "" },
@@ -670,7 +671,7 @@ programme.forEach(function(day) {
       var name = document.createElement("div"); name.className = "day-slot-name"; name.textContent = slot.name;
       info.appendChild(time);
       if (slot.status) {
-        var statusLabels = { confirmed: "Confirm\u00e9", pending: "En attente", vote: "\u00c0 valider" };
+        var statusLabels = { confirmed: "Confirm\u00e9", pending: "En attente", waitlist: "Liste d'attente", vote: "\u00c0 valider" };
         var stag = document.createElement("span"); stag.className = "status-tag status-" + slot.status;
         stag.textContent = statusLabels[slot.status] || slot.status;
         name.appendChild(stag);
